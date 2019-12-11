@@ -9,6 +9,5 @@ public class PlayerData {
 
     public void setPlayerNickname(String playerNickname) {
         this.playerNickname = playerNickname;
-        System.out.println(playerNickname);
     }
 }

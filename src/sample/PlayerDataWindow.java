@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -24,6 +25,8 @@ public class PlayerDataWindow {
     private Button okButton;
     private Button cancelButton;
 
+    private TextField nicknameField;
+
     public PlayerDataWindow(){
         playerDataWindow = new Stage();
 
@@ -38,13 +41,15 @@ public class PlayerDataWindow {
         playerDataLayout = new TilePane();
         playerDataLayout.styleProperty().set("-fx-background-color: #5D6D7E");
 
+        nicknameField = new TextField("");
+
         HBox hbox = new HBox();
         hbox.getChildren().addAll(okButton, cancelButton);
         hbox.setSpacing(10);
 
         Label nicknameLabel = new Label("Wprowadź nick");
         nicknameLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 30));
-        TextField nicknameField = new TextField("");
+
         nicknameField.setFont(Font.font("Helvetica", FontWeight.BOLD, 20));
         nicknameLabel.setLabelFor(nicknameField);
 
@@ -57,9 +62,19 @@ public class PlayerDataWindow {
         });
 
         okButton.setOnAction(actionEvent -> {
-            PlayerData playerData = new PlayerData();
-            playerData.setPlayerNickname(nicknameField.getText());
-            playerDataWindow.close();
+            if(checkPlayerNicknameNotEmpty()){
+                PlayerData playerData = new PlayerData();
+                playerData.setPlayerNickname(nicknameField.getText());
+                playerDataWindow.close();
+
+                GameMainWindow gameMainWindow = new GameMainWindow();
+                gameMainWindow.displayMainGameWindow();
+            }
+            else{
+                nicknameField.setPromptText("Wprowadź nick gracza!");
+                nicknameField.setFont(Font.font("Helvetica", FontPosture.ITALIC, 20));
+                nicknameField.setStyle("-fx-background-color: #FF0000");
+            }
         });
 
     }
@@ -70,5 +85,14 @@ public class PlayerDataWindow {
         playerDataWindow.initModality(Modality.APPLICATION_MODAL);
 
         playerDataWindow.showAndWait();
+    }
+
+    public boolean checkPlayerNicknameNotEmpty(){
+        if(nicknameField.getText().equals("")){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 }
