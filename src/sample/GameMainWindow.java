@@ -5,10 +5,8 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -18,8 +16,9 @@ public class GameMainWindow {
     private static final int SCENE_WIDTH = 950;
     private static final int SCENE_HEIGHT = 700;
 
-    private Button chooseCategoryButton;
-    private Button randomCategoryButton;
+    private GameMainWindowButtons chooseCategoryButton;
+    private GameMainWindowButtons randomCategoryButton;
+    private GameMainWindowButtons settingsButton;
 
     private Stage gameMainWindow;
     private Scene gameMainScene;
@@ -31,17 +30,26 @@ public class GameMainWindow {
         gameMainWindow = new Stage();
         gameMainWindow.setTitle("Czółko");
 
-        chooseCategoryButton = new Button("Wybierz kategorię z listy");
-        randomCategoryButton = new Button("Wylosuj kategorię");
+        chooseCategoryButton = new GameMainWindowButtons("Wybierz kategorię z listy");
+        randomCategoryButton = new GameMainWindowButtons("Wylosuj kategorię");
+        settingsButton = new GameMainWindowButtons("");
 
         categoryComboBox = new CategoryComboBox();
 
-        configureCategoryButtons();
+        chooseCategoryButton.configureCategoryButton();
+        randomCategoryButton.configureCategoryButton();
+        settingsButton.configureSettingsButton();
+
+        chooseCategoryButton.setOpacityAnimation();
+        randomCategoryButton.setOpacityAnimation();
+        settingsButton.setColorAnimation();
+
         displayMainGameWindow();
 
-        chooseCategoryButton.setOnAction(actionEvent -> {
-            //layout.add(categoryComboBox.comboBox, 4, 0);
+        settingsButton.setOnAction(eventAction -> {
+            GameSettingWindow settingWindow = new GameSettingWindow();
         });
+
     }
 
     public void displayMainGameWindow(){
@@ -52,15 +60,16 @@ public class GameMainWindow {
         gameMainScene = new Scene(layout, SCENE_WIDTH, SCENE_HEIGHT);
         gameMainScene.getStylesheets().addAll(this.getClass().getResource("/resources/backgroundStyle.css").toExternalForm());
 
-        HBox hbox = new HBox(50);
-        hbox.setAlignment(Pos.CENTER);
-        hbox.getChildren().addAll(randomCategoryButton, chooseCategoryButton);
+//        HBox hbox = new HBox(50);
+//        hbox.setAlignment(Pos.CENTER);
+//        hbox.getChildren().addAll(randomCategoryButton, chooseCategoryButton);
 
         layout.setPadding(new Insets(10,10,10,10));
 
         layout.setVgap(10);
         layout.setHgap(10);
         //layout.add(hbox,3,2);
+        layout.add(settingsButton,45,0);
         layout.add(chooseCategoryButton,0,0);
         layout.add(randomCategoryButton,0,1);
 
@@ -70,30 +79,6 @@ public class GameMainWindow {
         gameMainWindow.show();
     }
 
-    public void closeGame(){
-        gameMainWindow.close();
-    }
-
-    public void configureCategoryButtons(){
-        chooseCategoryButton.setOpacity(0.75);
-        randomCategoryButton.setOpacity(0.75);
-
-        chooseCategoryButton.getStylesheets().add("/resources/categoryButtons/chooseCategoryButtonStyle.css");
-        chooseCategoryButton.setWrapText(true);
-        chooseCategoryButton.autosize();
-
-
-        randomCategoryButton.getStylesheets().add("/resources/categoryButtons/chooseCategoryButtonStyle.css");
-        randomCategoryButton.setWrapText(true);
-        randomCategoryButton.autosize();
-    }
-
-    public void addColorAnimationToCategoryButtons(){
-        gameMainWindow.setOnCloseRequest(actionEvent -> {
-            actionEvent.consume();
-            closeGame();
-        });
-    }
 
 
     private class CategoryComboBox {
