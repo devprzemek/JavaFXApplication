@@ -6,9 +6,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
@@ -19,10 +20,12 @@ public class GameMainWindow {
     private GameMainWindowButtons chooseCategoryButton;
     private GameMainWindowButtons randomCategoryButton;
     private GameMainWindowButtons settingsButton;
+    private GameMainWindowButtons startButton;
+    private Label categoryLabel;
 
     private Stage gameMainWindow;
     private Scene gameMainScene;
-    private GridPane layout;
+    private BorderPane layout;
 
     private CategoryComboBox categoryComboBox;
 
@@ -33,12 +36,16 @@ public class GameMainWindow {
         chooseCategoryButton = new GameMainWindowButtons("Wybierz kategorię z listy");
         randomCategoryButton = new GameMainWindowButtons("Wylosuj kategorię");
         settingsButton = new GameMainWindowButtons("");
+        startButton = new GameMainWindowButtons("");
+        categoryLabel = new Label();
+        configureCategoryLabel();
 
         categoryComboBox = new CategoryComboBox();
 
         chooseCategoryButton.configureCategoryButton();
         randomCategoryButton.configureCategoryButton();
         settingsButton.configureSettingsButton();
+        startButton.configureStartButton();
 
         chooseCategoryButton.setOpacityAnimation();
         randomCategoryButton.setOpacityAnimation();
@@ -46,32 +53,43 @@ public class GameMainWindow {
 
         displayMainGameWindow();
 
+        //obsługa zdarzeń przycisków
         settingsButton.setOnAction(eventAction -> {
             GameSettingWindow settingWindow = new GameSettingWindow();
         });
 
+        chooseCategoryButton.setOnAction(actionEvent -> {
+            layout.setCenter(categoryComboBox.comboBox);
+            layout.setAlignment(categoryComboBox.comboBox, Pos.TOP_RIGHT);
+            chooseCategoryButton.setDisable(true);
+        });
+
+        randomCategoryButton.setOnAction(actionEvent -> {
+            categoryLabel.setText("Kategoria: \n" + RandomCategoryGenerator.generateRandomCategory());
+            layout.setCenter(categoryLabel);
+            layout.setAlignment(categoryLabel, Pos.TOP_RIGHT);
+
+        });
     }
 
     public void displayMainGameWindow(){
-
-        layout = new GridPane ();
+        layout = new BorderPane();
         layout.setId("pane");
 
         gameMainScene = new Scene(layout, SCENE_WIDTH, SCENE_HEIGHT);
         gameMainScene.getStylesheets().addAll(this.getClass().getResource("/resources/backgroundStyle.css").toExternalForm());
 
-//        HBox hbox = new HBox(50);
-//        hbox.setAlignment(Pos.CENTER);
-//        hbox.getChildren().addAll(randomCategoryButton, chooseCategoryButton);
+        VBox vbox = new VBox(50);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.getChildren().addAll(randomCategoryButton, chooseCategoryButton);
 
         layout.setPadding(new Insets(10,10,10,10));
 
-        layout.setVgap(10);
-        layout.setHgap(10);
-        //layout.add(hbox,3,2);
-        layout.add(settingsButton,45,0);
-        layout.add(chooseCategoryButton,0,0);
-        layout.add(randomCategoryButton,0,1);
+        layout.setLeft(vbox);
+        layout.setAlignment(vbox, Pos.TOP_LEFT);
+        layout.setRight(settingsButton);
+        layout.setBottom(startButton);
+        layout.setAlignment(startButton, Pos.BOTTOM_RIGHT);
 
 
         gameMainWindow.setScene(gameMainScene);
@@ -79,11 +97,20 @@ public class GameMainWindow {
         gameMainWindow.show();
     }
 
+    public boolean categoryChosen(){
+        return true;
+    }
+
+    public void configureCategoryLabel(){
+        System.out.println("ok");
+        categoryLabel.getStylesheets().add("/resources/labelStyle.css");
+    }
+
 
 
     private class CategoryComboBox {
 
-        private final ComboBox<String> comboBox;
+        private  final ComboBox<String> comboBox;
 
         ObservableList<String> availableCategories = FXCollections.observableArrayList(
                 "Polskie piosenki", "Zagraniczne piosenki"
@@ -91,14 +118,20 @@ public class GameMainWindow {
 
         public CategoryComboBox(){
             comboBox = new ComboBox<>(availableCategories);
-            comboBox.setPromptText("choose category");
+            comboBox.setPromptText("...");
             configureCategoryComboBox();
+
+            comboBox.setOnAction(actionEvent -> {
+                categoryLabel.setText("Kategoria: \n" + comboBox.getValue());
+                layout.setCenter(categoryLabel);
+                layout.setAlignment(categoryLabel, Pos.TOP_RIGHT);
+                chooseCategoryButton.setDisable(false);
+            });
         }
 
         public void configureCategoryComboBox(){
             AnchorPane.setLeftAnchor(chooseCategoryButton, 100d);
             comboBox.getStylesheets().add("/resources/categoryComboBox/categoryComboBoxStyle.css");
         }
-
     }
 }

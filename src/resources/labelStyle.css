@@ -1,0 +1,7 @@
+.label {
+    -fx-border-width: 3;
+    -fx-border-color: red;
+    -fx-font: 30 Halvetica;
+    -fx-font-weight: bold;
+    -fx-text-fill: #17202A
+}

@@ -37,4 +37,9 @@ public class GameMainWindowButtons extends Button {
         });
     }
 
+    public void configureStartButton(){
+        setGraphic(ImageLoader.resizeImage(ImageLoader.loadImageFromFile("res/buttonIcons/startIcon.png"),200,150));
+        setStyle("-fx-background-color: transparent");
+    }
+
 }

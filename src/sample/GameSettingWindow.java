@@ -37,7 +37,7 @@ public class GameSettingWindow {
         root.getChildren().addAll(numberOfSongsLabel, numberOfSongs);
 
         layout.getChildren().addAll(root);
-        settingsWindowScene = new Scene(layout, SCENE_HEIGHT, SCENE_HEIGHT);
+        settingsWindowScene = new Scene(layout, SCENE_WIDTH, SCENE_HEIGHT);
         displayWindow();
     }
 
