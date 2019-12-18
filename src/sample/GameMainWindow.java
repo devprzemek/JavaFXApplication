@@ -12,6 +12,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.sql.ResultSet;
+
 
 public class GameMainWindow {
     private static final int SCENE_WIDTH = 950;
@@ -60,15 +62,21 @@ public class GameMainWindow {
 
         chooseCategoryButton.setOnAction(actionEvent -> {
             layout.setCenter(categoryComboBox.comboBox);
-            layout.setAlignment(categoryComboBox.comboBox, Pos.TOP_RIGHT);
+            layout.setAlignment(categoryComboBox.comboBox, Pos.BOTTOM_RIGHT);
             chooseCategoryButton.setDisable(true);
         });
 
         randomCategoryButton.setOnAction(actionEvent -> {
             categoryLabel.setText("Kategoria: \n" + RandomCategoryGenerator.generateRandomCategory());
             layout.setCenter(categoryLabel);
-            layout.setAlignment(categoryLabel, Pos.TOP_RIGHT);
+            layout.setAlignment(categoryLabel, Pos.BOTTOM_RIGHT);
 
+        });
+
+        startButton.setOnAction(actionEvent -> {
+            String sqlQuery = "select songs.songName from songs where country = 'Polska' ";
+            DatabaseConnector.connectWithSongDatebas();
+            ResultSet resultSet = DatabaseConnector.executeMyQuery(sqlQuery);
         });
     }
 
