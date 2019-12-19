@@ -25,10 +25,10 @@ public class GameMenu  {
 
 
     public GameMenu(){
-        playButton = new MenuButton("Zagraj");
-        scoresButton = new MenuButton("Wyniki");
-        optionsButton = new MenuButton("Opcje");
-        exitButton = new MenuButton("Zakończ");
+        playButton = new MenuButton("Play");
+        scoresButton = new MenuButton("Scores");
+        optionsButton = new MenuButton("Options");
+        exitButton = new MenuButton("Quit");
 
         menuButtons  = new VBox(5);
         layout = new StackPane ();

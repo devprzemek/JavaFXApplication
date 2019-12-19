@@ -1,13 +1,9 @@
 package sample;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -29,20 +25,17 @@ public class GameMainWindow {
     private Scene gameMainScene;
     private BorderPane layout;
 
-    private CategoryComboBox categoryComboBox;
 
     public GameMainWindow(){
         gameMainWindow = new Stage();
         gameMainWindow.setTitle("Czółko");
 
-        chooseCategoryButton = new GameMainWindowButtons("Wybierz kategorię z listy");
-        randomCategoryButton = new GameMainWindowButtons("Wylosuj kategorię");
+        chooseCategoryButton = new GameMainWindowButtons("Choose categories");
+        randomCategoryButton = new GameMainWindowButtons("Random category");
         settingsButton = new GameMainWindowButtons("");
         startButton = new GameMainWindowButtons("");
         categoryLabel = new Label();
         configureCategoryLabel();
-
-        categoryComboBox = new CategoryComboBox();
 
         chooseCategoryButton.configureCategoryButton();
         randomCategoryButton.configureCategoryButton();
@@ -61,9 +54,8 @@ public class GameMainWindow {
         });
 
         chooseCategoryButton.setOnAction(actionEvent -> {
-            layout.setCenter(categoryComboBox.comboBox);
-            layout.setAlignment(categoryComboBox.comboBox, Pos.BOTTOM_RIGHT);
-            chooseCategoryButton.setDisable(true);
+            CategoryChooseWindow categoryChooser = new CategoryChooseWindow();
+            categoryChooser.displayChooseCategoryWindow();
         });
 
         randomCategoryButton.setOnAction(actionEvent -> {
@@ -105,41 +97,7 @@ public class GameMainWindow {
         gameMainWindow.show();
     }
 
-    public boolean categoryChosen(){
-        return true;
-    }
-
     public void configureCategoryLabel(){
-        System.out.println("ok");
         categoryLabel.getStylesheets().add("/resources/labelStyle.css");
-    }
-
-
-
-    private class CategoryComboBox {
-
-        private  final ComboBox<String> comboBox;
-
-        ObservableList<String> availableCategories = FXCollections.observableArrayList(
-                "Polskie piosenki", "Zagraniczne piosenki"
-        );
-
-        public CategoryComboBox(){
-            comboBox = new ComboBox<>(availableCategories);
-            comboBox.setPromptText("...");
-            configureCategoryComboBox();
-
-            comboBox.setOnAction(actionEvent -> {
-                categoryLabel.setText("Kategoria: \n" + comboBox.getValue());
-                layout.setCenter(categoryLabel);
-                layout.setAlignment(categoryLabel, Pos.TOP_RIGHT);
-                chooseCategoryButton.setDisable(false);
-            });
-        }
-
-        public void configureCategoryComboBox(){
-            AnchorPane.setLeftAnchor(chooseCategoryButton, 100d);
-            comboBox.getStylesheets().add("/resources/categoryComboBox/categoryComboBoxStyle.css");
-        }
     }
 }

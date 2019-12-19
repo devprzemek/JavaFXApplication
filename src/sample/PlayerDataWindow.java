@@ -47,7 +47,7 @@ public class PlayerDataWindow {
         hbox.getChildren().addAll(okButton, cancelButton);
         hbox.setSpacing(10);
 
-        Label nicknameLabel = new Label("Wprowadź nick");
+        Label nicknameLabel = new Label("Type nick");
         nicknameLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 30));
 
         nicknameField.setFont(Font.font("Helvetica", FontWeight.BOLD, 20));
@@ -71,7 +71,7 @@ public class PlayerDataWindow {
                 gameMainWindow.displayMainGameWindow();
             }
             else{
-                nicknameField.setPromptText("Wprowadź nick gracza!");
+                nicknameField.setPromptText("Type in your nick!");
                 nicknameField.setFont(Font.font("Helvetica", FontPosture.ITALIC, 20));
                 nicknameField.setStyle("-fx-background-color: #FF0000");
             }

@@ -1,0 +1,16 @@
+.radio-button {
+    -fx-text-fill: #ECF0F1;
+    -fx-font-size: 15pt;
+    -fx-font-family: 'Helvetica'
+}
+.radio-button .radio {
+    -fx-background-color: white;
+    -fx-background-image: null;
+    -fx-border-radius: 15px;
+
+}
+
+.radio-button .dot {
+    -fx-background-radius: 15px;
+    -fx-padding: 8px;
+}
