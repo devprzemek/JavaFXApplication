@@ -28,7 +28,7 @@ public class GameMainWindow {
 
     public GameMainWindow(){
         gameMainWindow = new Stage();
-        gameMainWindow.setTitle("Czółko");
+        gameMainWindow.setTitle("Czółko Game");
 
         chooseCategoryButton = new GameMainWindowButtons("Choose categories");
         randomCategoryButton = new GameMainWindowButtons("Random category");
@@ -50,19 +50,18 @@ public class GameMainWindow {
 
         //obsługa zdarzeń przycisków
         settingsButton.setOnAction(eventAction -> {
-            GameSettingWindow settingWindow = new GameSettingWindow();
+            GameSettingWindow.getInstance().displayGameSettingsWindow();
         });
 
         chooseCategoryButton.setOnAction(actionEvent -> {
-            CategoryChooseWindow categoryChooser = new CategoryChooseWindow();
-            categoryChooser.displayChooseCategoryWindow();
+            categoryLabel.setText("");
+            CategoryChooseWindow.getInstance().displayChooseCategoryWindow();
         });
 
         randomCategoryButton.setOnAction(actionEvent -> {
-            categoryLabel.setText("Kategoria: \n" + RandomCategoryGenerator.generateRandomCategory());
+            categoryLabel.setText("Category: \n" + RandomCategoryGenerator.generateRandomCategory());
             layout.setCenter(categoryLabel);
-            layout.setAlignment(categoryLabel, Pos.BOTTOM_RIGHT);
-
+            layout.setAlignment(categoryLabel, Pos.CENTER);
         });
 
         startButton.setOnAction(actionEvent -> {
@@ -97,7 +96,7 @@ public class GameMainWindow {
         gameMainWindow.show();
     }
 
-    public void configureCategoryLabel(){
-        categoryLabel.getStylesheets().add("/resources/labelStyle.css");
+    private void configureCategoryLabel(){
+        categoryLabel.getStylesheets().add("/resources/categoryLabel/categoryLabelStyle.css");
     }
 }

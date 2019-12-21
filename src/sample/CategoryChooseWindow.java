@@ -1,17 +1,18 @@
 package sample;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class CategoryChooseWindow {
+    private static final CategoryChooseWindow chooseWindow = new CategoryChooseWindow();
+
     private static final int SCENE_WIDTH = 500;
     private static final int SCENE_HEIGHT = 450;
 
@@ -22,7 +23,7 @@ public class CategoryChooseWindow {
     private Button okButton;
     private Button cancelButton;
 
-    public CategoryChooseWindow(){
+    private CategoryChooseWindow(){
         categoryChooseWindow = new Stage();
 
         okButton = new Button("Save", ImageLoader.resizeImage(ImageLoader.loadImageFromFile("res/buttonIcons/acceptIcon.png"),64,64));
@@ -39,15 +40,15 @@ public class CategoryChooseWindow {
         genreLabel.getStylesheets().add("resources/categoryLabel/categoryLabelStyle.css");
 
         //radio buttons which allow to choose songs' origin
-        final ToggleGroup group = new ToggleGroup();
+        final ToggleGroup countryGroup = new ToggleGroup();
         RadioButton polishSongs = new RadioButton("polish songs");
-        polishSongs.setToggleGroup(group);
+        polishSongs.setToggleGroup(countryGroup);
 
         RadioButton foreignSongs = new RadioButton("foreign songs");
-        foreignSongs.setToggleGroup(group);
+        foreignSongs.setToggleGroup(countryGroup);
 
         RadioButton allSongs = new RadioButton("all songs");
-        allSongs.setToggleGroup(group);
+        allSongs.setToggleGroup(countryGroup);
         allSongs.setSelected(true);
 
         HBox hBox = new HBox();
@@ -56,24 +57,24 @@ public class CategoryChooseWindow {
         hBox.getStylesheets().add("/resources/categoryButtons/chooseCategoryRadioButtnsStyle.css");
 
         //radio buttons which allow to choose songs' genre
-        final ToggleGroup groupGenre = new ToggleGroup();
+        final ToggleGroup genreGroup = new ToggleGroup();
         RadioButton popSongs = new RadioButton("pop");
-        popSongs.setToggleGroup(groupGenre);
+        popSongs.setToggleGroup(genreGroup);
 
         RadioButton rockSongs = new RadioButton("rock");
-        rockSongs.setToggleGroup(groupGenre);
+        rockSongs.setToggleGroup(genreGroup);
 
         RadioButton discopoloSongs = new RadioButton("disco-polo");
-        discopoloSongs.setToggleGroup(groupGenre);
+        discopoloSongs.setToggleGroup(genreGroup);
 
         RadioButton metalSongs = new RadioButton("metal");
-        metalSongs.setToggleGroup(groupGenre);
+        metalSongs.setToggleGroup(genreGroup);
 
         RadioButton reggaeSongs = new RadioButton("reggae");
-        reggaeSongs.setToggleGroup(groupGenre);
+        reggaeSongs.setToggleGroup(genreGroup);
 
         RadioButton allGenreSongs = new RadioButton("all");
-        allGenreSongs.setToggleGroup(groupGenre);
+        allGenreSongs.setToggleGroup(genreGroup);
         allGenreSongs.setSelected(true);
 
         HBox hBox2 = new HBox();
@@ -100,6 +101,37 @@ public class CategoryChooseWindow {
         categoryChooseLayout.setVgap(10);
         categoryChooseLayout.getChildren().addAll(countryLabel, hBox, genreLabel,hBox2, hBox3, hBox4);
 
+        categoryChooseScene = new Scene(categoryChooseLayout, SCENE_WIDTH, SCENE_HEIGHT);
+        categoryChooseWindow.setScene(categoryChooseScene);
+        categoryChooseWindow.initModality(Modality.APPLICATION_MODAL);
+
+        countryGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>()
+        {
+            public void changed(ObservableValue<? extends Toggle> ob,
+                                Toggle o, Toggle n)
+            {
+                RadioButton radioButton = (RadioButton) countryGroup.getSelectedToggle();
+
+                if (radioButton != null) {
+                    SongSettings.setSongCountry(radioButton.getText());
+                }
+            }
+        });
+
+        genreGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>()
+        {
+            public void changed(ObservableValue<? extends Toggle> ob,
+                                Toggle o, Toggle n)
+            {
+                RadioButton radioButton = (RadioButton) genreGroup.getSelectedToggle();
+
+                if (radioButton != null) {
+                    SongSettings.setSongGenre(radioButton.getText());
+                }
+            }
+        });
+
+
         cancelButton.setOnAction(actionEvent -> {
             categoryChooseWindow.close();
         });
@@ -109,11 +141,11 @@ public class CategoryChooseWindow {
         });
     }
 
-    public void displayChooseCategoryWindow(){
-        categoryChooseScene = new Scene(categoryChooseLayout, SCENE_WIDTH, SCENE_HEIGHT);
-        categoryChooseWindow.setScene(categoryChooseScene);
-        categoryChooseWindow.initModality(Modality.APPLICATION_MODAL);
+    public static CategoryChooseWindow getInstance(){
+        return chooseWindow;
+    }
 
+    public void displayChooseCategoryWindow(){
         categoryChooseWindow.showAndWait();
     }
 }

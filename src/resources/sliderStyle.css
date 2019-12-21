@@ -9,12 +9,12 @@
 /* Styling the filled track */
 .slider > .subtitle {
     -fx-font-size: 30px;
+    -fx-font-size: 15pt;
+    -fx-font-family: 'Helvetica';
+    -fx-font-weight: bold
 }
 
 .slider-value {
     -fx-fill: white;
     -fx-stroke: white;
-    -fx-font-size: 15pt;
-    -fx-font-family: 'Helvetica';
-    -fx-font-weight: bold
 }

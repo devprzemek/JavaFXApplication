@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 
 
 public class GameSettingWindow {
+    private static final GameSettingWindow gameSettingWindow = new GameSettingWindow();
+
     private static final int SCENE_WIDTH = 400;
     private static final int SCENE_HEIGHT = 400;
 
@@ -21,13 +23,13 @@ public class GameSettingWindow {
     private final Slider numberOfSongsSlider;
     Label numberOfSongsLabel;
 
-    public GameSettingWindow(){
+    private GameSettingWindow(){
         settingsWindowStage = new Stage();
         layout = new StackPane();
         layout.styleProperty().set("-fx-background-color: #5D6D7E");
 
         numberOfSongsSlider = new Slider ();
-        numberOfSongsLabel = new Label("Liczba piosenek:");
+        numberOfSongsLabel = new Label("Number of songs:");
         numberOfSongsLabel.getStylesheets().add("/resources/categoryLabel/categoryLabelStyle.css");
         configureNumberOfSongsSlider();
 
@@ -38,14 +40,18 @@ public class GameSettingWindow {
 
         layout.getChildren().addAll(root);
         settingsWindowScene = new Scene(layout, SCENE_WIDTH, SCENE_HEIGHT);
-        displayWindow();
-    }
-
-    private void displayWindow(){
         settingsWindowStage.setScene(settingsWindowScene);
         settingsWindowStage.initModality(Modality.APPLICATION_MODAL);
-        settingsWindowStage.show();
+
+        displayGameSettingsWindow();
+
+        numberOfSongsSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            int number = Math.round(newValue.floatValue());
+            numberOfSongsLabel.setText("Number of songs: " + number);
+            SongSettings.setNumberOfSongsInRound(number);
+        });
     }
+
 
     private void configureNumberOfSongsSlider(){
         numberOfSongsSlider.setMin(1);
@@ -56,6 +62,14 @@ public class GameSettingWindow {
         numberOfSongsSlider.setShowTickLabels(true);
         numberOfSongsSlider.setShowTickMarks(true);
         numberOfSongsSlider.getStylesheets().add("/resources/sliderStyle.css");
+    }
+
+    public void displayGameSettingsWindow(){
+        settingsWindowStage.show();
+    }
+
+    public static GameSettingWindow getInstance(){
+        return gameSettingWindow;
     }
 
 }

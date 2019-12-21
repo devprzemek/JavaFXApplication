@@ -3,7 +3,7 @@ package sample;
 import java.util.*;
 
 public class RandomCategoryGenerator {
-    private final static String songs[] = {"Polskie piosenki", "Zagraniczne piosenki"};
+    private final static String songs[] = {"polish songs", "foreign songs", "pop", "rock", "disco-polo", "metal", "reggae"};
     private final static List<String> availableCategories = new ArrayList<>(Arrays.asList(songs));
 
     public static String generateRandomCategory(){
