@@ -29,6 +29,7 @@ public class PlayerDataWindow {
 
     public PlayerDataWindow(){
         playerDataWindow = new Stage();
+        playerDataWindow.setResizable(false);
 
         okButton = new Button("Add and Start", ImageLoader.resizeImage(ImageLoader.loadImageFromFile("res/buttonIcons/acceptIcon.png"),64,64));
         okButton.setStyle("-fx-background-color: #F9E79F");

@@ -25,6 +25,7 @@ public class CategoryChooseWindow {
 
     private CategoryChooseWindow(){
         categoryChooseWindow = new Stage();
+        categoryChooseWindow.setResizable(false);
 
         okButton = new Button("Save", ImageLoader.resizeImage(ImageLoader.loadImageFromFile("res/buttonIcons/acceptIcon.png"),64,64));
         okButton.setStyle("-fx-background-color: #F9E79F");
@@ -50,6 +51,7 @@ public class CategoryChooseWindow {
         RadioButton allSongs = new RadioButton("all songs");
         allSongs.setToggleGroup(countryGroup);
         allSongs.setSelected(true);
+        SongSettings.setSongCountry(allSongs.getText());
 
         HBox hBox = new HBox();
         hBox.getChildren().addAll(polishSongs, foreignSongs, allSongs);
@@ -76,6 +78,7 @@ public class CategoryChooseWindow {
         RadioButton allGenreSongs = new RadioButton("all");
         allGenreSongs.setToggleGroup(genreGroup);
         allGenreSongs.setSelected(true);
+        SongSettings.setSongGenre(allGenreSongs.getText());
 
         HBox hBox2 = new HBox();
         hBox2.getChildren().addAll(popSongs, rockSongs, discopoloSongs, metalSongs);
@@ -145,7 +148,7 @@ public class CategoryChooseWindow {
         return chooseWindow;
     }
 
-    public void displayChooseCategoryWindow(){
+    public void displayCategoryChooseWindow(){
         categoryChooseWindow.showAndWait();
     }
 }

@@ -25,7 +25,6 @@ public class GameMainWindow {
     private Scene gameMainScene;
     private BorderPane layout;
 
-
     public GameMainWindow(){
         gameMainWindow = new Stage();
         gameMainWindow.setTitle("Czółko Game");
@@ -45,7 +44,6 @@ public class GameMainWindow {
         chooseCategoryButton.setOpacityAnimation();
         randomCategoryButton.setOpacityAnimation();
         settingsButton.setColorAnimation();
-
         displayMainGameWindow();
 
         //obsługa zdarzeń przycisków
@@ -55,17 +53,20 @@ public class GameMainWindow {
 
         chooseCategoryButton.setOnAction(actionEvent -> {
             categoryLabel.setText("");
-            CategoryChooseWindow.getInstance().displayChooseCategoryWindow();
+            CategoryChooseWindow.getInstance().displayCategoryChooseWindow();
+            startButton.setDisable(false);
         });
 
         randomCategoryButton.setOnAction(actionEvent -> {
             categoryLabel.setText("Category: \n" + RandomCategoryGenerator.generateRandomCategory());
             layout.setCenter(categoryLabel);
             layout.setAlignment(categoryLabel, Pos.CENTER);
+            //NullPointerException !!!
+            startButton.setDisable(false);
         });
 
         startButton.setOnAction(actionEvent -> {
-            String sqlQuery = "select songs.songName from songs where country = 'Polska' ";
+            String sqlQuery = SongSettings.makeSQLQuery();
             DatabaseConnector.connectWithSongDatebas();
             ResultSet resultSet = DatabaseConnector.executeMyQuery(sqlQuery);
         });
@@ -90,7 +91,6 @@ public class GameMainWindow {
         layout.setBottom(startButton);
         layout.setAlignment(startButton, Pos.BOTTOM_RIGHT);
 
-
         gameMainWindow.setScene(gameMainScene);
         gameMainWindow.setResizable(false);
         gameMainWindow.show();
@@ -99,4 +99,5 @@ public class GameMainWindow {
     private void configureCategoryLabel(){
         categoryLabel.getStylesheets().add("/resources/categoryLabel/categoryLabelStyle.css");
     }
+
 }

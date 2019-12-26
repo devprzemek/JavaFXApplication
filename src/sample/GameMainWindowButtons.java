@@ -30,7 +30,7 @@ public class GameMainWindowButtons extends Button {
 
     public void setColorAnimation(){
         setOnMouseMoved(actionEvent -> {
-            setStyle("-fx-background-color: black");
+            setStyle("-fx-background-color: #B03A2E ");
         });
         setOnMouseExited(actionEvent -> {
             setStyle("-fx-background-color: transparent");
@@ -38,8 +38,8 @@ public class GameMainWindowButtons extends Button {
     }
 
     public void configureStartButton(){
+        setDisable(true);
         setGraphic(ImageLoader.resizeImage(ImageLoader.loadImageFromFile("res/buttonIcons/startIcon.png"),200,150));
         setStyle("-fx-background-color: transparent");
     }
-
 }
