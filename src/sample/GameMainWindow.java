@@ -5,10 +5,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 
 
 public class GameMainWindow {
@@ -19,6 +21,7 @@ public class GameMainWindow {
     private GameMainWindowButtons randomCategoryButton;
     private GameMainWindowButtons settingsButton;
     private GameMainWindowButtons startButton;
+    private GameMainWindowButtons backToMenuButton;
     private Label categoryLabel;
 
     private Stage gameMainWindow;
@@ -33,6 +36,7 @@ public class GameMainWindow {
         randomCategoryButton = new GameMainWindowButtons("Random category");
         settingsButton = new GameMainWindowButtons("");
         startButton = new GameMainWindowButtons("");
+        backToMenuButton = new GameMainWindowButtons("Back to menu");
         categoryLabel = new Label();
         configureCategoryLabel();
 
@@ -40,11 +44,13 @@ public class GameMainWindow {
         randomCategoryButton.configureCategoryButton();
         settingsButton.configureSettingsButton();
         startButton.configureStartButton();
+        backToMenuButton.configureBackToMenuButton();
 
         chooseCategoryButton.setOpacityAnimation();
         randomCategoryButton.setOpacityAnimation();
         settingsButton.setColorAnimation();
         displayMainGameWindow();
+
 
         //obsługa zdarzeń przycisków
         settingsButton.setOnAction(eventAction -> {
@@ -68,7 +74,30 @@ public class GameMainWindow {
         startButton.setOnAction(actionEvent -> {
             String sqlQuery = SongSettings.makeSQLQuery();
             DatabaseConnector.connectWithSongDatebas();
-            ResultSet resultSet = DatabaseConnector.executeMyQuery(sqlQuery);
+            ResultSet rs = DatabaseConnector.executeMyQuery(sqlQuery);
+
+            try{
+                ResultSetMetaData rsmd = rs.getMetaData();
+                int numberOfColumns = rsmd.getColumnCount();
+                while (rs.next()) {
+                    for (int i = 1; i <= numberOfColumns; i++) {
+                        if (i > 1) System.out.print(",  ");
+                        String columnValue = rs.getString(i);
+                        System.out.print(columnValue);
+                    }
+                    System.out.println("");
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+            DatabaseConnector.closeConnectionWithSongDatabase();
+
+        });
+
+        backToMenuButton.setOnAction(actionEvent -> {
+            gameMainWindow.close();
         });
     }
 
@@ -83,13 +112,16 @@ public class GameMainWindow {
         vbox.setAlignment(Pos.CENTER);
         vbox.getChildren().addAll(randomCategoryButton, chooseCategoryButton);
 
+        HBox hBox = new HBox(550);
+        hBox.setAlignment(Pos.CENTER);
+        hBox.getChildren().addAll(backToMenuButton, startButton);
+
         layout.setPadding(new Insets(10,10,10,10));
 
         layout.setLeft(vbox);
         layout.setAlignment(vbox, Pos.TOP_LEFT);
         layout.setRight(settingsButton);
-        layout.setBottom(startButton);
-        layout.setAlignment(startButton, Pos.BOTTOM_RIGHT);
+        layout.setBottom(hBox);
 
         gameMainWindow.setScene(gameMainScene);
         gameMainWindow.setResizable(false);

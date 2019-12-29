@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.scene.control.Alert;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -12,12 +14,19 @@ public class DatabaseConnector {
     private static final String password = "";
 
     private static Connection myConnection;
+    private static Statement myStatement;
 
 
     public static void connectWithSongDatebas(){
         try {
             myConnection = DriverManager.getConnection(url, user, password);
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Datebase error.");
+            alert.setContentText("Impossible to connect with datebase!");
+            alert.showAndWait();
             e.printStackTrace();
         }
     }
@@ -25,15 +34,23 @@ public class DatabaseConnector {
     public static ResultSet executeMyQuery(String sqlQuery){
         ResultSet resultSet = null;
         try {
-            Statement myStatement = myConnection.createStatement();
+            myStatement = myConnection.createStatement();
             resultSet = myStatement.executeQuery(sqlQuery);
-            while(resultSet.next()){
-                System.out.println(resultSet.getString("songName"));
-            }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
 
         return resultSet;
+    }
+
+    public static void closeConnectionWithSongDatabase(){
+        try {
+            myStatement.close();
+            myConnection.close();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
