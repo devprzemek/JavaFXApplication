@@ -46,7 +46,6 @@ public class GameMainWindowButtons extends Button {
 
     public void configureBackToMenuButton(){
         setGraphic(ImageLoader.resizeImage(ImageLoader.loadImageFromFile("res/buttonIcons/cancelIcon.png"),100,100));
-        setStyle("-fx-background-color: #F9E79F");
-        setMinWidth(200);
+        setStyle("-fx-background-color: transparent");
     }
 }

@@ -40,7 +40,7 @@ public class PlayerDataWindow {
         cancelButton.setMinSize(64, 64);
 
         playerDataLayout = new TilePane();
-        playerDataLayout.styleProperty().set("-fx-background-color: #5D6D7E");
+        playerDataLayout.styleProperty().set("-fx-background-color: #2E4053");
 
         nicknameField = new TextField("");
 
@@ -49,7 +49,7 @@ public class PlayerDataWindow {
         hbox.setSpacing(10);
 
         Label nicknameLabel = new Label("Type nick");
-        nicknameLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 30));
+        nicknameLabel.setStyle("-fx-font: 30 Halvetica; -fx-font-weight: bold; -fx-text-fill: #117864 ");
 
         nicknameField.setFont(Font.font("Helvetica", FontWeight.BOLD, 20));
         nicknameLabel.setLabelFor(nicknameField);
@@ -85,7 +85,7 @@ public class PlayerDataWindow {
         playerDataWindow.setScene(playerDataScene);
         playerDataWindow.initModality(Modality.APPLICATION_MODAL);
 
-        playerDataWindow.showAndWait();
+        playerDataWindow.show();
     }
 
     public boolean checkPlayerNicknameNotEmpty(){

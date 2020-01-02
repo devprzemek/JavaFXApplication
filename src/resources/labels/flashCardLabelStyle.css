@@ -1,0 +1,9 @@
+.label{
+    -fx-text-fill: #424949 ;
+    -fx-font-size: 20pt;
+    -fx-font-family: 'Helvetica';
+    -fx-font-weight: bold;
+    -fx-background-color: #DC7633;
+    -fx-max-height: 100;
+    -fx-max-width: 200
+}

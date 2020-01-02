@@ -49,14 +49,14 @@ public class GameSettingWindow {
 
         numberOfSongsSlider = new Slider ();
         numberOfSongsLabel = new Label();
-        numberOfSongsLabel.getStylesheets().add("/resources/categoryLabel/categoryLabelStyle.css");
+        numberOfSongsLabel.getStylesheets().add("/resources/labels/categoryLabelStyle.css");
         configureSlider(numberOfSongsSlider, 1, 15, 10);
         numberOfSongsLabel.setText("Number of songs: " + (int) numberOfSongsSlider.getValue());
 
         timeForGuessingSongSlider = new Slider();
         timeForGuessingSongLabel = new Label();
-        timeForGuessingSongLabel.getStylesheets().add("/resources/categoryLabel/categoryLabelStyle.css");
-        timeForGuessingSongSlider.getStylesheets().add("/resources/categoryLabel/categoryLabelStyle.css");
+        timeForGuessingSongLabel.getStylesheets().add("/resources/labels/categoryLabelStyle.css");
+        timeForGuessingSongSlider.getStylesheets().add("/resources/labels/categoryLabelStyle.css");
         configureSlider(timeForGuessingSongSlider, 10, 60, 30);
         timeForGuessingSongLabel.setText("Time for guessing each song: " + (int) timeForGuessingSongSlider.getValue() + " s");
 

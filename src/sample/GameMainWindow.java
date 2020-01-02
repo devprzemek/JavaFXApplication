@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class GameMainWindow {
@@ -36,7 +38,7 @@ public class GameMainWindow {
         randomCategoryButton = new GameMainWindowButtons("Random category");
         settingsButton = new GameMainWindowButtons("");
         startButton = new GameMainWindowButtons("");
-        backToMenuButton = new GameMainWindowButtons("Back to menu");
+        backToMenuButton = new GameMainWindowButtons("");
         categoryLabel = new Label();
         configureCategoryLabel();
 
@@ -49,6 +51,7 @@ public class GameMainWindow {
         chooseCategoryButton.setOpacityAnimation();
         randomCategoryButton.setOpacityAnimation();
         settingsButton.setColorAnimation();
+        backToMenuButton.setColorAnimation();
         displayMainGameWindow();
 
 
@@ -64,10 +67,12 @@ public class GameMainWindow {
         });
 
         randomCategoryButton.setOnAction(actionEvent -> {
-            categoryLabel.setText("Category: \n" + RandomCategoryGenerator.generateRandomCategory());
+            String randomCategory = RandomCategoryGenerator.generateRandomCategory();
+            categoryLabel.setText("Category: \n" + randomCategory);
             layout.setCenter(categoryLabel);
             layout.setAlignment(categoryLabel, Pos.CENTER);
-            //NullPointerException !!!
+            SongSettings.setSongCountry("all songs");
+            SongSettings.setSongGenre(randomCategory);
             startButton.setDisable(false);
         });
 
@@ -79,20 +84,23 @@ public class GameMainWindow {
             try{
                 ResultSetMetaData rsmd = rs.getMetaData();
                 int numberOfColumns = rsmd.getColumnCount();
+                String[] columnValues = new String[numberOfColumns];
+                List<SongFlashCard> flashCards = new ArrayList<>();
                 while (rs.next()) {
-                    for (int i = 1; i <= numberOfColumns; i++) {
-                        if (i > 1) System.out.print(",  ");
-                        String columnValue = rs.getString(i);
-                        System.out.print(columnValue);
+                    for (int i = 0; i < numberOfColumns; i++) {
+                        columnValues[i] = rs.getString(i + 1);
                     }
-                    System.out.println("");
+                    flashCards.add(new SongFlashCard(columnValues[0], columnValues[1], Integer.parseInt(columnValues[2])));
                 }
+                GameWindow.initialiseSongFlashCardsSet(flashCards);
             }
             catch (Exception e){
                 e.printStackTrace();
             }
 
             DatabaseConnector.closeConnectionWithSongDatabase();
+
+            GameWindow.getInstance().displayGameWindow();
 
         });
 
@@ -112,7 +120,7 @@ public class GameMainWindow {
         vbox.setAlignment(Pos.CENTER);
         vbox.getChildren().addAll(randomCategoryButton, chooseCategoryButton);
 
-        HBox hBox = new HBox(550);
+        HBox hBox = new HBox(650);
         hBox.setAlignment(Pos.CENTER);
         hBox.getChildren().addAll(backToMenuButton, startButton);
 
@@ -129,7 +137,7 @@ public class GameMainWindow {
     }
 
     private void configureCategoryLabel(){
-        categoryLabel.getStylesheets().add("/resources/categoryLabel/categoryLabelStyle.css");
+        categoryLabel.getStylesheets().add("/resources/labels/categoryLabelStyle.css");
     }
 
 }

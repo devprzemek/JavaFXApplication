@@ -37,8 +37,8 @@ public class CategoryChooseWindow {
 
         Label countryLabel = new Label("Country");
         Label genreLabel = new Label("Genre");
-        countryLabel.getStylesheets().add("resources/categoryLabel/categoryLabelStyle.css");
-        genreLabel.getStylesheets().add("resources/categoryLabel/categoryLabelStyle.css");
+        countryLabel.getStylesheets().add("resources/labels/categoryLabelStyle.css");
+        genreLabel.getStylesheets().add("resources/labels/categoryLabelStyle.css");
 
         //radio buttons which allow to choose songs' origin
         final ToggleGroup countryGroup = new ToggleGroup();
