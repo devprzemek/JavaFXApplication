@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 
 public class SongFlashCard extends Label {
@@ -13,12 +14,13 @@ public class SongFlashCard extends Label {
         songPerformer = performer;
         releaseYear = year;
 
+        setAlignment(Pos.CENTER);
         createSongFlashCard();
     }
 
     @Override
     public String toString() {
-        return "[" + songTitle + songPerformer + releaseYear + "]";
+        return songTitle + "\n" + songPerformer + "\n" + releaseYear;
     }
 
     public void createSongFlashCard(){

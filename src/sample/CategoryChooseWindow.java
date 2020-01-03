@@ -56,7 +56,7 @@ public class CategoryChooseWindow {
         HBox hBox = new HBox();
         hBox.getChildren().addAll(polishSongs, foreignSongs, allSongs);
         hBox.setSpacing(8);
-        hBox.getStylesheets().add("/resources/categoryButtons/chooseCategoryRadioButtnsStyle.css");
+        hBox.getStylesheets().add("/resources/buttons/chooseCategoryRadioButtnsStyle.css");
 
         //radio buttons which allow to choose songs' genre
         final ToggleGroup genreGroup = new ToggleGroup();
@@ -84,13 +84,13 @@ public class CategoryChooseWindow {
         hBox2.getChildren().addAll(popSongs, rockSongs, discopoloSongs, metalSongs);
         hBox2.setAlignment(Pos.TOP_CENTER);
         hBox2.setSpacing(8);
-        hBox2.getStylesheets().add("/resources/categoryButtons/chooseCategoryRadioButtnsStyle.css");
+        hBox2.getStylesheets().add("/resources/buttons/chooseCategoryRadioButtnsStyle.css");
 
         HBox hBox3 = new HBox();
         hBox3.getChildren().addAll(reggaeSongs, allGenreSongs);
         hBox3.setAlignment(Pos.TOP_CENTER);
         hBox3.setSpacing(6);
-        hBox3.getStylesheets().add("/resources/categoryButtons/chooseCategoryRadioButtnsStyle.css");
+        hBox3.getStylesheets().add("/resources/buttons/chooseCategoryRadioButtnsStyle.css");
 
         categoryChooseLayout = new TilePane();
         categoryChooseLayout.styleProperty().set("-fx-background-color: #5D6D7E");

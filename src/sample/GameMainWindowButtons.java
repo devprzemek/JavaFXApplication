@@ -9,7 +9,7 @@ public class GameMainWindowButtons extends Button {
 
     public void configureCategoryButton(){
         setOpacity(0.75);
-        getStylesheets().add("/resources/categoryButtons/chooseCategoryButtonStyle.css");
+        getStylesheets().add("/resources/buttons/chooseCategoryButtonStyle.css");
         setWrapText(true);
         autosize();
     }

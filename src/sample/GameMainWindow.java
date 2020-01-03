@@ -85,14 +85,14 @@ public class GameMainWindow {
                 ResultSetMetaData rsmd = rs.getMetaData();
                 int numberOfColumns = rsmd.getColumnCount();
                 String[] columnValues = new String[numberOfColumns];
-                List<SongFlashCard> flashCards = new ArrayList<>();
+                List<SongFlashCard> flashCards = new ArrayList<>(SongSettings.getNumberOfSongsInRound());
                 while (rs.next()) {
                     for (int i = 0; i < numberOfColumns; i++) {
                         columnValues[i] = rs.getString(i + 1);
                     }
                     flashCards.add(new SongFlashCard(columnValues[0], columnValues[1], Integer.parseInt(columnValues[2])));
                 }
-                GameWindow.initialiseSongFlashCardsSet(flashCards);
+                GameWindow.getInstance().initialiseSongFlashCardsSet(flashCards);
             }
             catch (Exception e){
                 e.printStackTrace();

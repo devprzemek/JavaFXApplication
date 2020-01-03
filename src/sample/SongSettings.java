@@ -25,6 +25,10 @@ public class SongSettings {
         timeForGuessingSong = timeInSeconds;
     }
 
+    public static int getNumberOfSongsInRound() {
+        return numberOfSongsInRound;
+    }
+
     public static String makeSQLQuery(){
         String countryExpression;
         String genreExpression;

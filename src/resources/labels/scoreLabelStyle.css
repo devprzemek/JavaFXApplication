@@ -1,0 +1,7 @@
+.label{
+    -fx-text-fill: #A93226 ;
+    -fx-font-size: 20pt;
+    -fx-font-family: 'Helvetica';
+    -fx-font-weight: bold;
+    -fx-border-color: #A93226;
+}
