@@ -4,8 +4,8 @@ public class SongSettings {
     private static String songCountry;
     private static String songGenre;
 
-    private static int numberOfSongsInRound;
-    private static int timeForGuessingSong;
+    private static int numberOfSongsInRound = 10;
+    private static int timeForGuessingSong = 30;
 
     private static final String SQLQueryTemplate = "SELECT songName, songPerformer, year FROM songs WHERE %s AND %s;";
 
@@ -17,16 +17,20 @@ public class SongSettings {
         songGenre = songG;
     }
 
-    public static void setNumberOfSongsInRound(int number){
+    public static void changeNumberOfSongsInRound(int number){
         numberOfSongsInRound = number;
     }
 
-    public static void setTimeForGuessingSong(int timeInSeconds) {
+    public static void changeTimeForGuessingSong(int timeInSeconds) {
         timeForGuessingSong = timeInSeconds;
     }
 
     public static int getNumberOfSongsInRound() {
         return numberOfSongsInRound;
+    }
+
+    public static int getTimeForGuessingSong() {
+        return timeForGuessingSong;
     }
 
     public static String makeSQLQuery(){

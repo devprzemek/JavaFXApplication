@@ -82,13 +82,13 @@ public class GameSettingWindow {
         numberOfSongsSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             int number = Math.round(newValue.floatValue());
             numberOfSongsLabel.setText("Number of songs: " + number);
-            SongSettings.setNumberOfSongsInRound(number);
+            SongSettings.changeNumberOfSongsInRound(number);
         });
 
         timeForGuessingSongSlider.valueProperty().addListener((observable, oldValue, newValue )-> {
             int number = Math.round(newValue.floatValue());
             timeForGuessingSongLabel.setText("Time for guessing each song: " + number + " s");
-            SongSettings.setTimeForGuessingSong(number);
+            SongSettings.changeTimeForGuessingSong(number);
         });
 
         okButton.setOnAction(actionEvent -> {

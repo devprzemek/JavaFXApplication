@@ -1,7 +1,8 @@
 package sample;
 
-import javafx.geometry.Pos;
+
 import javafx.scene.control.Label;
+import javafx.scene.text.TextAlignment;
 
 public class SongFlashCard extends Label {
     private String songTitle;
@@ -14,7 +15,7 @@ public class SongFlashCard extends Label {
         songPerformer = performer;
         releaseYear = year;
 
-        setAlignment(Pos.CENTER);
+        setTextAlignment(TextAlignment.CENTER);
         createSongFlashCard();
     }
 
@@ -25,6 +26,7 @@ public class SongFlashCard extends Label {
 
     public void createSongFlashCard(){
         getStylesheets().add("/resources/labels/flashCardLabelStyle.css");
+        setTextAlignment(TextAlignment.CENTER);
         setText(toString());
     }
 }

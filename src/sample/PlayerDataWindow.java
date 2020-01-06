@@ -27,6 +27,8 @@ public class PlayerDataWindow {
 
     private TextField nicknameField;
 
+    protected static Player playerInfo;
+
     public PlayerDataWindow(){
         playerDataWindow = new Stage();
         playerDataWindow.setResizable(false);
@@ -64,8 +66,8 @@ public class PlayerDataWindow {
 
         okButton.setOnAction(actionEvent -> {
             if(checkPlayerNicknameNotEmpty()){
-                PlayerData playerData = new PlayerData();
-                playerData.setPlayerNickname(nicknameField.getText());
+                playerInfo = new Player();
+                playerInfo.setPlayerNickname(nicknameField.getText());
                 playerDataWindow.close();
 
                 GameMainWindow gameMainWindow = new GameMainWindow();

@@ -30,6 +30,8 @@ public class GameMainWindow {
     private Scene gameMainScene;
     private BorderPane layout;
 
+    private GameWindow gameWindow;
+
     public GameMainWindow(){
         gameMainWindow = new Stage();
         gameMainWindow.setTitle("Czółko Game");
@@ -92,7 +94,8 @@ public class GameMainWindow {
                     }
                     flashCards.add(new SongFlashCard(columnValues[0], columnValues[1], Integer.parseInt(columnValues[2])));
                 }
-                GameWindow.getInstance().initialiseSongFlashCardsSet(flashCards);
+                gameWindow = new GameWindow();
+                gameWindow.initialiseSongFlashCardsSet(flashCards);
             }
             catch (Exception e){
                 e.printStackTrace();
@@ -100,8 +103,8 @@ public class GameMainWindow {
 
             DatabaseConnector.closeConnectionWithSongDatabase();
 
-            GameWindow.getInstance().displayGameWindow();
-
+            gameWindow.displayGameWindow();
+            gameMainWindow.close();
         });
 
         backToMenuButton.setOnAction(actionEvent -> {

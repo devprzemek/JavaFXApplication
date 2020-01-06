@@ -4,6 +4,7 @@
     -fx-font-family: 'Helvetica';
     -fx-font-weight: bold;
     -fx-background-color: #DC7633;
-    -fx-max-height: 300;
-    -fx-max-width: 400
+
+    -fx-board-height: 250;
+    -fx-board-width: 400
 }

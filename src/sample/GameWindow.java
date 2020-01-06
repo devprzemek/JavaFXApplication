@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -21,7 +22,6 @@ import javafx.util.Duration;
 import java.util.List;
 
 public class GameWindow {
-    private static final GameWindow gameWindow = new GameWindow();
     private final Button nextSongButton;
     private final Button passSongButton;
     private final Label scoreLabel;
@@ -36,8 +36,11 @@ public class GameWindow {
     private List<? extends Label> songFlashCards;
     private int flashCardIndex = 1;
 
-    private GameWindow(){
+    private Timeline guessingSongTimeline;
+
+    public GameWindow(){
         scoreLabel = new Label("Points : 0");
+        scoreLabel.setAlignment(Pos.CENTER);
         scoreLabel.getStylesheets().add("/resources/labels/scoreLabelStyle.css");
 
         nextSongButton = new Button("next");
@@ -57,9 +60,24 @@ public class GameWindow {
 
         displayGameWindow();
 
+        guessingSongTimeline = new Timeline(new KeyFrame(
+                Duration.seconds(SongSettings.getTimeForGuessingSong()),
+                event -> {
+                    layout.setCenter(getNextFlashCard());
+                    modifyScoreLabel();
+                }));;
+
         //obsługa zdarzeń przycisków
         nextSongButton.setOnAction(actionEvent -> {
             layout.setCenter(getNextFlashCard());
+            PlayerDataWindow.playerInfo.increaseScore();
+            modifyScoreLabel();
+            guessingSongTimeline.playFromStart();
+        });
+
+        passSongButton.setOnAction(actionEvent -> {
+            layout.setCenter(getNextFlashCard());
+            guessingSongTimeline.playFromStart();
         });
     }
 
@@ -69,18 +87,14 @@ public class GameWindow {
         gameWindowStage.show();
     }
 
-    public static GameWindow getInstance(){
-        return gameWindow;
-    }
-
-    public void initialiseSongFlashCardsSet(List<? extends Label> list){
+     void initialiseSongFlashCardsSet(List<? extends Label> list){
         if(list == null){
             new NullPointerException();
         }
         songFlashCards = list;
     }
 
-    public Label getNextFlashCard(){
+    private Label getNextFlashCard(){
         flashCardIndex += 1;
         if(flashCardIndex < songFlashCards.size()){
             return songFlashCards.get(flashCardIndex);
@@ -88,6 +102,14 @@ public class GameWindow {
         return new Label("KONIEC");
     }
 
+    private void modifyScoreLabel(){
+        if(flashCardIndex < songFlashCards.size()){
+            StringBuffer scoreLabelText = new StringBuffer("Points : ");
+            scoreLabelText.append(PlayerDataWindow.playerInfo.getPlayerScore());
+            scoreLabel.setAlignment(Pos.CENTER);
+            scoreLabel.setText(scoreLabelText.toString());
+        }
+    }
 
     //wewnętrzna klasa animacji
     private class FXTimer extends Application {
@@ -122,7 +144,7 @@ public class GameWindow {
 
             timeline.setOnFinished(actionEvent -> {
                 layout.setTop(scoreLabel);
-                layout.setCenter(songFlashCards.get(1));
+                layout.setCenter(songFlashCards.get(flashCardIndex));
 
                 HBox hBox = new HBox(100);
                 hBox.setAlignment(Pos.CENTER);
@@ -130,6 +152,9 @@ public class GameWindow {
 
                 layout.setBottom(hBox);
                 layout.setAlignment(hBox, Pos.BOTTOM_CENTER);
+
+                guessingSongTimeline.setCycleCount(Animation.INDEFINITE);
+                guessingSongTimeline.play();
             });
 
         }

@@ -1,7 +1,10 @@
 .label{
     -fx-text-fill: #A93226 ;
-    -fx-font-size: 20pt;
+    -fx-font-size: 22pt;
     -fx-font-family: 'Helvetica';
     -fx-font-weight: bold;
     -fx-border-color: #A93226;
+
+    -fx-max-height: 50;
+    -fx-max-width: 200
 }
