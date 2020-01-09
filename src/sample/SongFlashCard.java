@@ -24,7 +24,7 @@ public class SongFlashCard extends Label {
         return songTitle + "\n" + songPerformer + "\n" + releaseYear;
     }
 
-    public void createSongFlashCard(){
+    private void createSongFlashCard(){
         getStylesheets().add("/resources/labels/flashCardLabelStyle.css");
         setTextAlignment(TextAlignment.CENTER);
         setText(toString());

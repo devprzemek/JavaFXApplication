@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -34,8 +35,9 @@ public class GameWindow {
     private BorderPane layout;
 
     private List<? extends Label> songFlashCards;
-    private int flashCardIndex = 1;
+    private int flashCardIndex = 0;
 
+    private RemainingTimeBar remainingTimeBar;
     private Timeline guessingSongTimeline;
 
     public GameWindow(){
@@ -58,25 +60,26 @@ public class GameWindow {
         gameWindowStage.setResizable(false);
         gameWindowStage.initModality(Modality.APPLICATION_MODAL);
 
-        displayGameWindow();
-
         guessingSongTimeline = new Timeline(new KeyFrame(
                 Duration.seconds(SongSettings.getTimeForGuessingSong()),
                 event -> {
-                    layout.setCenter(getNextFlashCard());
-                    modifyScoreLabel();
-                }));;
+                    setLayoutCenter();
+                    remainingTimeBar.start(gameWindowStage);
+                }));
+        guessingSongTimeline.setCycleCount(Animation.INDEFINITE);
+
+        remainingTimeBar = new RemainingTimeBar(guessingSongTimeline);
 
         //obsługa zdarzeń przycisków
         nextSongButton.setOnAction(actionEvent -> {
-            layout.setCenter(getNextFlashCard());
+            setLayoutCenter();
             PlayerDataWindow.playerInfo.increaseScore();
             modifyScoreLabel();
             guessingSongTimeline.playFromStart();
         });
 
         passSongButton.setOnAction(actionEvent -> {
-            layout.setCenter(getNextFlashCard());
+            setLayoutCenter();
             guessingSongTimeline.playFromStart();
         });
     }
@@ -99,12 +102,15 @@ public class GameWindow {
         if(flashCardIndex < songFlashCards.size()){
             return songFlashCards.get(flashCardIndex);
         }
-        return new Label("KONIEC");
+        else{
+            guessingSongTimeline.stop();
+            return new Label("KONIEC");
+        }
     }
 
     private void modifyScoreLabel(){
         if(flashCardIndex < songFlashCards.size()){
-            StringBuffer scoreLabelText = new StringBuffer("Points : ");
+            StringBuilder scoreLabelText = new StringBuilder("Points : ");
             scoreLabelText.append(PlayerDataWindow.playerInfo.getPlayerScore());
             scoreLabel.setAlignment(Pos.CENTER);
             scoreLabel.setText(scoreLabelText.toString());
@@ -119,7 +125,6 @@ public class GameWindow {
         private Label timerLabel = new Label();
         private IntegerProperty timeSeconds = new SimpleIntegerProperty(START_TIME);
 
-
         @Override
         public void start(Stage primaryStage) {
             // Bind the timerLabel text property to the timeSeconds property
@@ -131,7 +136,7 @@ public class GameWindow {
             displayCountdownAnimation();
         }
 
-        public void displayCountdownAnimation(){
+        private void displayCountdownAnimation(){
             if (timeline != null) {
                 timeline.stop();
             }
@@ -143,20 +148,36 @@ public class GameWindow {
             timeline.playFromStart();
 
             timeline.setOnFinished(actionEvent -> {
-                layout.setTop(scoreLabel);
-                layout.setCenter(songFlashCards.get(flashCardIndex));
+                configureLayoutAfterCountdownAnimation();
 
-                HBox hBox = new HBox(100);
-                hBox.setAlignment(Pos.CENTER);
-                hBox.getChildren().addAll(passSongButton, nextSongButton);
-
-                layout.setBottom(hBox);
-                layout.setAlignment(hBox, Pos.BOTTOM_CENTER);
-
-                guessingSongTimeline.setCycleCount(Animation.INDEFINITE);
+                try {
+                    remainingTimeBar.init();
+                    remainingTimeBar.start(gameWindowStage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 guessingSongTimeline.play();
             });
-
         }
+    }
+
+    private void configureLayoutAfterCountdownAnimation(){
+        layout.setTop(scoreLabel);
+
+        HBox hBox = new HBox(100);
+        hBox.setAlignment(Pos.CENTER);
+        hBox.getChildren().addAll(passSongButton, nextSongButton);
+
+        layout.setBottom(hBox);
+        layout.setAlignment(hBox, Pos.BOTTOM_CENTER);
+
+        setLayoutCenter();
+    }
+
+    private void setLayoutCenter(){
+        VBox vBox = new VBox(10);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.getChildren().addAll(getNextFlashCard(), remainingTimeBar.getTimeBar());
+        layout.setCenter(vBox);
     }
 }
