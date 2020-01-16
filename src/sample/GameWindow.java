@@ -25,6 +25,7 @@ import java.util.List;
 public class GameWindow {
     private final Button nextSongButton;
     private final Button passSongButton;
+    private final Button pauseButton;
     private final Label scoreLabel;
 
     private static final int SCENE_WIDTH = 550;
@@ -39,9 +40,11 @@ public class GameWindow {
 
     private RemainingTimeBar remainingTimeBar;
     private Timeline guessingSongTimeline;
+    private boolean gamePaused = false;
+    private boolean gameRoundEnded = false;
 
     public GameWindow(){
-        scoreLabel = new Label("Points : 0");
+        scoreLabel = new Label("Points : 000");
         scoreLabel.setAlignment(Pos.CENTER);
         scoreLabel.getStylesheets().add("/resources/labels/scoreLabelStyle.css");
 
@@ -49,6 +52,9 @@ public class GameWindow {
         nextSongButton.getStylesheets().add("/resources/buttons/gameWindowButtons.css");
         passSongButton = new Button("pass");
         passSongButton.getStylesheets().add("/resources/buttons/gameWindowButtons.css");
+        pauseButton = new Button();
+        pauseButton.setGraphic(ImageLoader.resizeImage(ImageLoader.loadImageFromFile("res/buttonIcons/pauseIcon.png"),50,50));
+        pauseButton.setStyle("-fx-background-color: transparent");
 
         gameWindowStage = new Stage();
         layout = new BorderPane();
@@ -72,15 +78,37 @@ public class GameWindow {
 
         //obsługa zdarzeń przycisków
         nextSongButton.setOnAction(actionEvent -> {
-            setLayoutCenter();
-            PlayerDataWindow.playerInfo.increaseScore();
-            modifyScoreLabel();
-            guessingSongTimeline.playFromStart();
+            if (gameRoundEnded) {
+                guessingSongTimeline.stop();
+                InformationDialog gameEndInfo = new InformationDialog("Thanks for playing :)");
+                gameEndInfo.showInformationDialog();
+                gameEndInfo.closeWindows(gameWindowStage);
+
+            }
+            else {
+                setLayoutCenter();
+                PlayerDataWindow.playerInfo.increaseScore();
+                modifyScoreLabel();
+                guessingSongTimeline.playFromStart();
+            }
         });
 
         passSongButton.setOnAction(actionEvent -> {
             setLayoutCenter();
             guessingSongTimeline.playFromStart();
+        });
+
+        pauseButton.setOnAction(actionEvent -> {
+            gamePaused = gamePaused == false ? true : false;
+            if (gamePaused) {
+                guessingSongTimeline.pause();
+                nextSongButton.setDisable(gamePaused);
+                passSongButton.setDisable(gamePaused);
+            } else {
+                nextSongButton.setDisable(gamePaused);
+                passSongButton.setDisable(gamePaused);
+                guessingSongTimeline.play();
+            }
         });
     }
 
@@ -98,18 +126,18 @@ public class GameWindow {
     }
 
     private Label getNextFlashCard(){
-        flashCardIndex += 1;
-        if(flashCardIndex < songFlashCards.size()){
-            return songFlashCards.get(flashCardIndex);
+        if(flashCardIndex <songFlashCards.size()){
+            flashCardIndex += 1;
+            return songFlashCards.get(flashCardIndex - 1);
         }
         else{
-            guessingSongTimeline.stop();
-            return new Label("KONIEC");
+            gameRoundEnded = true;
+            return new Label("");
         }
     }
 
     private void modifyScoreLabel(){
-        if(flashCardIndex < songFlashCards.size()){
+        if(flashCardIndex <= songFlashCards.size()){
             StringBuilder scoreLabelText = new StringBuilder("Points : ");
             scoreLabelText.append(PlayerDataWindow.playerInfo.getPlayerScore());
             scoreLabel.setAlignment(Pos.CENTER);
@@ -119,7 +147,6 @@ public class GameWindow {
 
     //wewnętrzna klasa animacji
     private class FXTimer extends Application {
-
         private final Integer START_TIME = 3;
         private Timeline timeline;
         private Label timerLabel = new Label();
@@ -144,7 +171,7 @@ public class GameWindow {
             timeline = new Timeline();
             timeline.getKeyFrames().add(
                     new KeyFrame(Duration.seconds(START_TIME+1),
-                            new KeyValue(timeSeconds, 0)));
+                            new KeyValue(timeSeconds, 1)));
             timeline.playFromStart();
 
             timeline.setOnFinished(actionEvent -> {
@@ -162,14 +189,19 @@ public class GameWindow {
     }
 
     private void configureLayoutAfterCountdownAnimation(){
-        layout.setTop(scoreLabel);
+        HBox hBox1 = new HBox(200);
+        hBox1.setAlignment(Pos.CENTER);
+        hBox1.getChildren().addAll(scoreLabel, pauseButton);
 
-        HBox hBox = new HBox(100);
-        hBox.setAlignment(Pos.CENTER);
-        hBox.getChildren().addAll(passSongButton, nextSongButton);
+        HBox hBox2 = new HBox(100);
+        hBox2.setAlignment(Pos.CENTER);
+        hBox2.getChildren().addAll(passSongButton, nextSongButton);
 
-        layout.setBottom(hBox);
-        layout.setAlignment(hBox, Pos.BOTTOM_CENTER);
+        layout.setTop(hBox1);
+        layout.setAlignment(hBox1, Pos.BOTTOM_CENTER);
+
+        layout.setBottom(hBox2);
+        layout.setAlignment(hBox2, Pos.BOTTOM_CENTER);
 
         setLayoutCenter();
     }

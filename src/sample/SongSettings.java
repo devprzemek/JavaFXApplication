@@ -7,7 +7,7 @@ public class SongSettings {
     private static int numberOfSongsInRound = 10;
     private static int timeForGuessingSong = 30;
 
-    private static final String SQLQueryTemplate = "SELECT songName, songPerformer, year FROM songs WHERE %s AND %s;";
+    private static final String SQLQueryTemplate = "SELECT songName, songPerformer, year FROM songs WHERE %s AND %s LIMIT %d;";
 
     public static void setSongCountry(String songC) {
         songCountry = songC;
@@ -24,6 +24,7 @@ public class SongSettings {
     public static void changeTimeForGuessingSong(int timeInSeconds) {
         timeForGuessingSong = timeInSeconds;
     }
+
 
     public static int getNumberOfSongsInRound() {
         return numberOfSongsInRound;
@@ -55,7 +56,6 @@ public class SongSettings {
             default:
                 genreExpression = String.format("songGenre = '%s'", songGenre);
         }
-
-        return String.format(SQLQueryTemplate, countryExpression, genreExpression);
+        return String.format(SQLQueryTemplate, countryExpression, genreExpression, SongSettings.getNumberOfSongsInRound());
     }
 }

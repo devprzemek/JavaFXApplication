@@ -28,9 +28,9 @@ public class CategoryChooseWindow {
         categoryChooseWindow.setResizable(false);
 
         okButton = new Button("Save", ImageLoader.resizeImage(ImageLoader.loadImageFromFile("res/buttonIcons/acceptIcon.png"),64,64));
-        okButton.setStyle("-fx-background-color: #F9E79F");
+        okButton.setStyle("-fx-font-weight: bold; -fx-background-color: #F9E79F");
         cancelButton = new Button("Cancel", ImageLoader.resizeImage(ImageLoader.loadImageFromFile("res/buttonIcons/cancelIcon.png"),64,64));
-        cancelButton.setStyle("-fx-background-color: #F9E79F");
+        cancelButton.setStyle("-fx-font-weight: bold; -fx-background-color: #F9E79F");
 
         okButton.setMinSize(64, 64);
         cancelButton.setMinSize(64, 64);

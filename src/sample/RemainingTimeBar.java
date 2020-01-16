@@ -19,7 +19,6 @@ public class RemainingTimeBar extends Application {
     public RemainingTimeBar(Timeline timeline){
         timeBar = new Rectangle(RECTANGLE_WIDTH, RECTANGLE_HEIGHT, Color.RED);
         guessingSongTimeline = timeline;
-
     }
 
     @Override
